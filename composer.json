@@ -1,0 +1,35 @@
+{
+    "name": "ponticlaro/bebop-scripts-loader",
+    "description": "Bebop library to load both CSS and JS files",
+    "keywords": ["wordpress", "scripts", "loader", "css", "js", "javascript"],
+    "type": "library",
+    "license": [
+       "MIT",
+       "GPL-3.0+"
+    ],
+    "authors": [
+        {
+            "name": "Ponticlaro",
+            "email": "hello@ponticlaro.com",
+            "homepage": "http://www.ponticlaro.com",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "https://github.com/cristianobaptista/bebop-common"
+        }
+    ],
+    "require": {
+        "ponticlaro/bebop-common": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Ponticlaro": "src/"
+        }
+    },
+    "support": {
+        "email": "hello@ponticlaro.com"
+    }
+}
