@@ -3,6 +3,7 @@
 namespace Ponticlaro\Bebop\ScriptsLoader\Patterns;
 
 use Ponticlaro\Bebop\Common\Collection;
+use Ponticlaro\Bebop\Common\EnvManager;
 use Ponticlaro\Bebop\ScriptsLoader\Patterns\Script;
 
 class ScriptsHook {
@@ -83,12 +84,12 @@ class ScriptsHook {
 
         $this->id              = $id;
         $this->hook            = $hook;
-        $this->scripts         = new Collection()->disableDottedNotation();
-        $this->deregister_list = new Collection()->disableDottedNotation();
-        $this->dequeue_list    = new Collection()->disableDottedNotation();
-        $this->register_list   = new Collection()->disableDottedNotation();
-        $this->enqueue_list    = new Collection()->disableDottedNotation();
-        $this->env_configs     = new Collection()->disableDottedNotation();
+        $this->scripts         = (new Collection())->disableDottedNotation();
+        $this->deregister_list = (new Collection())->disableDottedNotation();
+        $this->dequeue_list    = (new Collection())->disableDottedNotation();
+        $this->register_list   = (new Collection())->disableDottedNotation();
+        $this->enqueue_list    = (new Collection())->disableDottedNotation();
+        $this->env_configs     = (new Collection())->disableDottedNotation();
 
         // Register and enqueue scripts on target hook
         add_action($hook, array($this, 'run'));
@@ -347,7 +348,7 @@ class ScriptsHook {
     protected function __applyEnvModifications()
     {
         // Get current environment
-        $current_env = Bebop::Env()->getCurrentKey();
+        $current_env = EnvManager::getInstance()->getCurrentKey();
 
         // Execute current environment function
         if ($this->env_configs->hasKey($current_env))

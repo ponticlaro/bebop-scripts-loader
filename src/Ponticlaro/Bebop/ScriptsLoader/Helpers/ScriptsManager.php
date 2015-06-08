@@ -26,7 +26,7 @@ class ScriptsManager {
      */
     public function __construct()
     {   
-        $this->hooks = new Collection()->disableDottedNotation();
+        $this->hooks = (new Collection())->disableDottedNotation();
     }
 
     /**
