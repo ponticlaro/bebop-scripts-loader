@@ -2,21 +2,22 @@
 
 namespace Ponticlaro\Bebop\ScriptsLoader;
 
+use Ponticlaro\Bebop\ScriptsLoader\Css\ScriptsHook;
 use Ponticlaro\Bebop\ScriptsLoader\Helpers\ScriptsManager;
-use Ponticlaro\Bebop\ScriptsLoader\Js\ScriptsHook;
+use Ponticlaro\Bebop\ScriptsLoader\Patterns\Script;
 
-class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
+class Css extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
+{
 
     /**
      * ScriptsManager instance
-     * 
-     * @var \Ponticlaro\Bebop\ScriptsLoader\Helpers\ScriptsManager
+     *
+     * @var ScriptsManager
      */
     protected static $manager;
 
     /**
-     * Instantiates JS Manager
-     * 
+     * Instantiates CSS Manager
      */
     protected function __construct()
     {
@@ -30,14 +31,15 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
 
     /**
      * Adds a script registration hook
-     * 
+     *
      * @param string $id   Registration hook ID
      * @param string $hook WordPress hook ID
+     * @return self
      */
-    public function addHook($id, $hook)
+    public function addHook($id, $hook_id)
     {
         // Generate new CSS scripts hook
-        $hook = new ScriptsHook($id, $hook);
+        $hook = new ScriptsHook($id, $hook_id);
 
         // Add hook to scripts manager
         self::$manager->addHook($hook);
@@ -47,9 +49,9 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
 
     /**
      * Returns a single registration hook by ID
-     * 
-     * @param  string                                    $id  ID of the target registration hook
-     * @return \Ponticlaro\Bebop\ScriptsLoader\Js\Script
+     *
+     * @param  string $id ID of the target registration hook
+     * @return Script
      */
     public function getHook($id)
     {
@@ -58,8 +60,9 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
 
     /**
      * Sets base url for all hooks
-     * 
+     *
      * @param string $url Base URL
+     * @return self
      */
     public function setBaseUrl($url)
     {
@@ -67,5 +70,5 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
             static::$manager->setBaseUrl($url);
 
         return $this;
-    } 
+    }
 }

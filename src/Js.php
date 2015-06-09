@@ -3,20 +3,22 @@
 namespace Ponticlaro\Bebop\ScriptsLoader;
 
 use Ponticlaro\Bebop\ScriptsLoader\Helpers\ScriptsManager;
-use Ponticlaro\Bebop\ScriptsLoader\Css\ScriptsHook;
+use Ponticlaro\Bebop\ScriptsLoader\Js\Script;
+use Ponticlaro\Bebop\ScriptsLoader\Js\ScriptsHook;
 
-class Css extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
+class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
+{
 
     /**
      * ScriptsManager instance
-     * 
-     * @var \Ponticlaro\Bebop\ScriptsLoader\Helpers\ScriptsManager
+     *
+     * @var ScriptsManager
      */
     protected static $manager;
 
     /**
-     * Instantiates CSS Manager
-     * 
+     * Instantiates JS Manager
+     *
      */
     protected function __construct()
     {
@@ -30,26 +32,27 @@ class Css extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
 
     /**
      * Adds a script registration hook
-     * 
+     *
      * @param string $id   Registration hook ID
      * @param string $hook WordPress hook ID
+     * @return self
      */
-    public function addHook($id, $hook_id)
+    public function addHook($id, $hook)
     {
         // Generate new CSS scripts hook
-        $hook = new ScriptsHook($id, $hook_id);
+        $hook = new ScriptsHook($id, $hook);
 
         // Add hook to scripts manager
         self::$manager->addHook($hook);
-        
+
         return $this;
     }
 
     /**
      * Returns a single registration hook by ID
-     * 
-     * @param  string                                     $id  ID of the target registration hook
-     * @return \Ponticlaro\Bebop\ScriptsLoader\Css\Script
+     *
+     * @param  string $id ID of the target registration hook
+     * @return Script
      */
     public function getHook($id)
     {
@@ -58,14 +61,16 @@ class Css extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract {
 
     /**
      * Sets base url for all hooks
-     * 
+     *
      * @param string $url Base URL
+     * @return self
      */
     public function setBaseUrl($url)
     {
-        if (is_string($url))
+        if (is_string($url)) {
             static::$manager->setBaseUrl($url);
+        }
 
         return $this;
-    } 
+    }
 }

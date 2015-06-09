@@ -19,8 +19,8 @@
         "ponticlaro/bebop-common": "dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "Ponticlaro": "src/"
+        "psr-4": {
+            "Ponticlaro\\Bebop\\ScriptsLoader\\": "src/"
         }
     },
     "support": {
