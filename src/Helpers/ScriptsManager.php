@@ -3,6 +3,7 @@
 namespace Ponticlaro\Bebop\ScriptsLoader\Helpers;
 
 use Ponticlaro\Bebop\Common\Collection;
+use Ponticlaro\Bebop\ScriptsLoader\Patterns\ScriptsHook;
 
 class ScriptsManager {
 
@@ -55,12 +56,10 @@ class ScriptsManager {
      * 
      * @param \Ponticlaro\Bebop\ScriptsLoader\Patterns\ScriptsHook $hook
      */
-    public function addHook(\Ponticlaro\Bebop\ScriptsLoader\Patterns\ScriptsHook $hook)
+    public function addHook(ScriptsHook $hook)
     {
-        if (!$hook->getBaseUrl() && !is_null($this->base_url)) {
-            
+        if (!$hook->getBaseUrl() && !is_null($this->base_url))
             $hook->setBaseUrl($this->base_url);
-        }
 
         $this->hooks->set($hook->getId(), $hook);
 
@@ -75,7 +74,8 @@ class ScriptsManager {
      */
     public function getHook($id)
     {
-        if (!is_string($id)) return null;
+        if (!is_string($id)) 
+            return null;
 
         return $this->hooks->get($id);
     }
