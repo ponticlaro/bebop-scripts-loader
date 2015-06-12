@@ -41,10 +41,10 @@ abstract class Script implements ScriptInterface {
     public function __construct()
     {
         // Create dependencies collection
-        $this->dependencies = new Collection()->disableDottedNotation();
+        $this->dependencies = (new Collection())->disableDottedNotation();
 
         // Create environment configuration collection
-        $this->env_configs = new Collection()->disableDottedNotation();
+        $this->env_configs = (new Collection())->disableDottedNotation();
     }
 
     /**
