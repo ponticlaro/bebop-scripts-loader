@@ -3,6 +3,9 @@
 namespace Ponticlaro\Bebop\ScriptsLoader\Patterns;
 
 use Ponticlaro\Bebop\Common\Collection;
+use Ponticlaro\Bebop\Common\EnvManager;
+use Ponticlaro\Bebop\Common\PathManager;
+use Ponticlaro\Bebop\Common\UrlManager;
 
 abstract class Script implements ScriptInterface {
 
@@ -120,7 +123,7 @@ abstract class Script implements ScriptInterface {
             return '';
         }
 
-        return $this->config->get('base_url') ? $this->config->get('base_url') .'/' : Bebop::getUrl('theme') .'/';
+        return $this->config->get('base_url') ? $this->config->get('base_url') .'/' : UrlManager::getInstance()->get('theme') .'/';
     }
 
     /**
@@ -154,7 +157,7 @@ abstract class Script implements ScriptInterface {
     public function getVersion()
     {
         $version = $this->config->get('version');
-        $path    = Bebop::getPath('theme') .'/'. $this->getPath();
+        $path    = PathManager::getInstance()->get('theme') .'/'. $this->getPath();
 
         if (!$version && is_readable($path)) $version = filemtime($path);
 
@@ -317,7 +320,7 @@ abstract class Script implements ScriptInterface {
     protected function __applyEnvModifications()
     {
         // Get current environment
-        $current_env = Bebop::Env()->getCurrentKey();
+        $current_env = EnvManager::getInstance()->getCurrentKey();
 
         // Execute current environment function
         if ($this->env_configs->hasKey($current_env))
