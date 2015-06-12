@@ -8,13 +8,12 @@ use Ponticlaro\Bebop\ScriptsLoader\Js\ScriptsHook;
 
 class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
 {
-
     /**
      * ScriptsManager instance
      *
      * @var ScriptsManager
      */
-    protected static $manager;
+    protected $manager;
 
     /**
      * Instantiates JS Manager
@@ -22,7 +21,7 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
      */
     protected function __construct()
     {
-        self::$manager = new ScriptsManager();
+        $this->manager = new ScriptsManager();
 
         // Add default hooks
         $this->addHook('front', 'wp_enqueue_scripts')
@@ -43,7 +42,7 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
         $hook = new ScriptsHook($id, $hook);
 
         // Add hook to scripts manager
-        self::$manager->addHook($hook);
+        $this->manager->addHook($hook);
 
         return $this;
     }
@@ -56,7 +55,7 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
      */
     public function getHook($id)
     {
-        return self::$manager->getHook($id);
+        return $this->manager->getHook($id);
     }
 
     /**
@@ -67,9 +66,8 @@ class Js extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
      */
     public function setBaseUrl($url)
     {
-        if (is_string($url)) {
-            static::$manager->setBaseUrl($url);
-        }
+        if (is_string($url))
+            $this->manager->setBaseUrl($url);
 
         return $this;
     }
