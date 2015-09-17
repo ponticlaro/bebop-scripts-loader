@@ -58,6 +58,13 @@ class ScriptsHook {
     protected $register_list;
 
     /**
+     * Holds scripts to be localized
+     * 
+     * @var \Ponticlaro\Bebop\Common\Collection
+     */
+    protected $localize_list;
+
+    /**
      * Holds scripts to be enqueued
      * 
      * @var \Ponticlaro\Bebop\Common\Collection
@@ -88,6 +95,7 @@ class ScriptsHook {
         $this->deregister_list = (new Collection())->disableDottedNotation();
         $this->dequeue_list    = (new Collection())->disableDottedNotation();
         $this->register_list   = (new Collection())->disableDottedNotation();
+        $this->localize_list   = (new Collection())->disableDottedNotation();
         $this->enqueue_list    = (new Collection())->disableDottedNotation();
         $this->env_configs     = (new Collection())->disableDottedNotation();
 
@@ -153,6 +161,26 @@ class ScriptsHook {
 
         $this->scripts->set($script->getid(), $script);
         $this->register_list->push($script->getid());
+
+        return $this;
+    }
+
+    /**
+     * Localize scripts
+     * 
+     * @param  string $id             Script IDS
+     * @param  string $variable_name  Name for the variable withing the script
+     * @param  array  $variable_value Data to be assigned as the variable value
+     */
+    public function localize($id, $variable_name, array $variable_value)
+    {
+        if (!is_string($id) || !is_string($variable_name))
+            throw new \Exception('Both $id and $variable_name need to be a string');
+        
+        $this->localize_list->push([
+            'variable_name'  => $variable_name,
+            'variable_value' => $variable_value
+        ], $id);
 
         return $this;
     }
@@ -239,6 +267,7 @@ class ScriptsHook {
         $this->__deregisterScripts();
         $this->__dequeueScripts();
         $this->__registerScripts();
+        $this->__localizeScripts();
         $this->__enqueueScripts();
     }
 
@@ -309,6 +338,28 @@ class ScriptsHook {
 
         return $this;
     }
+
+    /**
+     * Localize all scripts
+     * 
+     */
+    protected function __localizeScripts()
+    {
+        foreach ($this->localize_list->getAll() as $script_id => $localizations) {
+            
+            if (!$this->scripts->hasKey($script_id))
+                throw new \Exception("There is no registered script with the following id: '". $script_id ."'");
+            
+            $script_obj = $this->scripts->get($script_id);
+
+            foreach ($localizations as $data) {
+                $script_obj->localize($data['variable_name'], $data['variable_value']);
+            }
+        }
+
+        return $this;
+    }
+
 
     /**
      * Enqueues all scripts

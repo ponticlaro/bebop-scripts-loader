@@ -90,6 +90,21 @@ class Script extends \Ponticlaro\Bebop\ScriptsLoader\Patterns\Script {
     }
 
     /**
+     * Localize script
+     * 
+     */
+    public function localize($variable_name, array $variable_value)
+    {
+        // Register script if not already registered
+        if (!$this->is_registered) $this->register();
+
+        // Localize script
+        wp_localize_script($this->getId(), $variable_name, $variable_value);
+
+        return $this;
+    }
+
+    /**
      * Enqueues script
      * 
      */

@@ -302,6 +302,12 @@ abstract class Script implements ScriptInterface {
     public function deregister() {}
 
     /**
+     * Localize script
+     * 
+     */
+    public function localize() {}
+
+    /**
      * Enqueues script
      * 
      */
