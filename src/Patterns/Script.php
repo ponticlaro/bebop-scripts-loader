@@ -123,7 +123,7 @@ abstract class Script implements ScriptInterface {
             return '';
         }
 
-        return $this->config->get('base_url') ? $this->config->get('base_url') .'/' : UrlManager::getInstance()->get('theme') .'/';
+        return $this->config->get('base_url') ? $this->config->get('base_url') .'/' : null;
     }
 
     /**
