@@ -305,7 +305,7 @@ abstract class Script implements ScriptInterface {
      * Localize script
      * 
      */
-    public function localize() {}
+    public function localize($variable_name, array $variable_value) {}
 
     /**
      * Enqueues script
