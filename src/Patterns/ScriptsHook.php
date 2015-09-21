@@ -4,6 +4,7 @@ namespace Ponticlaro\Bebop\ScriptsLoader\Patterns;
 
 use Ponticlaro\Bebop\Common\Collection;
 use Ponticlaro\Bebop\Common\EnvManager;
+use Ponticlaro\Bebop\Common\PathManager;
 use Ponticlaro\Bebop\ScriptsLoader\Patterns\Script;
 
 class ScriptsHook {
@@ -327,7 +328,13 @@ class ScriptsHook {
 
             if ($this->scripts->hasKey($script_id)) {
 
-                $base_url   = $this->getBaseUrl();
+                $base_url = $this->getBaseUrl();
+
+                if (!$base_url) {
+                    $this->setBaseUrl(PathManager::getInstance()->get('theme'));
+                    $base_url = $this->getBaseUrl();
+                }
+
                 $script_obj = $this->scripts->get($script_id);
 
                 if ($base_url && !$script_obj->getBaseUrl()) $script_obj->setBaseUrl($base_url);
