@@ -7,6 +7,20 @@ use Ponticlaro\Bebop\Common\Collection;
 class Script extends \Ponticlaro\Bebop\ScriptsLoader\Patterns\Script {
 
     /**
+     * Flags if we should async the loading of this script
+     * 
+     * @var boolean
+     */
+    protected $async = false;
+
+    /**
+     * Flags if we should defer the loading of this script
+     * 
+     * @var boolean
+     */
+    protected $defer = false;
+
+    /**
      * Instantiates a new script object 
      * 
      * @param string  $id           Script ID
@@ -57,13 +71,103 @@ class Script extends \Ponticlaro\Bebop\ScriptsLoader\Patterns\Script {
     }
 
     /**
+     * Sets async loading
+     * 
+     * @param bool $value True to load with async, false otherwise
+     */
+    public function setAsync(bool $value)
+    {
+        $this->async = $value;
+
+        if ($value)
+            $this->defer = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns async loading flag
+     * 
+     * @return bool True to load with async, false otherwise
+     */
+    public function getAsync()
+    {
+        return $this->async;
+    }
+
+    /**
+     * Sets defer loading
+     * 
+     * @param bool $value True to load with defer, false otherwise
+     */
+    public function setDefer(bool $value)
+    {
+        $this->defer = $value;
+
+        if ($value)
+            $this->async = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns defer loading flag
+     * 
+     * @return bool True to load with defer, false otherwise
+     */
+    public function getDefer()
+    {
+        return $this->defer;   
+    }
+
+    /**
+     * Applies async attribute on script tag
+     * 
+     * @param  string $tag    Script HTML tag
+     * @param  string $handle Script handle
+     * @param  string $src    Script sourc
+     * @return string         Modified tag
+     */
+    public function applyAsyncAttrOnTag($tag, $handle, $src)
+    {
+        if ($handle != $this->getId())
+            return $tag;
+
+        return str_replace(' src', ' async src', $tag);
+    }
+
+    /**
+     * Applies defer attribute on script tag
+     * 
+     * @param  string $tag    Script HTML tag
+     * @param  string $handle Script handle
+     * @param  string $src    Script sourc
+     * @return string         Modified tag
+     */
+    public function applyDeferAttrOnTag($tag, $handle, $src)
+    {
+        if ($handle != $this->getId())
+            return $tag;
+
+        return str_replace(' src', ' defer src', $tag);
+    }
+
+    /**
      * Registers script
      * 
      */
     public function register()
-    {
+    {   
         // Apply any environment specific modification
         $this->__applyEnvModifications();
+
+        // Async loading
+        if ($this->getAsync())
+            add_filter('script_loader_tag', [$this, 'applyAsyncAttrOnTag'], 9999, 3);
+
+        // Defer loading
+        if ($this->getDefer())
+            add_filter('script_loader_tag', [$this, 'applyDeferAttrOnTag'], 9999, 3);
 
         // Register script
         wp_register_script(
