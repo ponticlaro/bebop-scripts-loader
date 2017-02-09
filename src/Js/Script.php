@@ -121,36 +121,28 @@ class Script extends \Ponticlaro\Bebop\ScriptsLoader\Patterns\Script {
     }
 
     /**
-     * Applies async attribute on script tag
+     * Applies HTML script tag modifications
      * 
      * @param  string $tag    Script HTML tag
      * @param  string $handle Script handle
      * @param  string $src    Script sourc
      * @return string         Modified tag
      */
-    public function applyAsyncAttrOnTag($tag, $handle, $src)
+    public function applyScriptTagModifications($tag, $handle, $src)
     {
         if ($handle != $this->getId())
             return $tag;
 
-        return str_replace(' src', ' async src', $tag);
-    }
+        // Async loading
+        if ($this->getAsync())
+            $tag = str_replace(' src', ' async src', $tag);
 
-    /**
-     * Applies defer attribute on script tag
-     * 
-     * @param  string $tag    Script HTML tag
-     * @param  string $handle Script handle
-     * @param  string $src    Script sourc
-     * @return string         Modified tag
-     */
-    public function applyDeferAttrOnTag($tag, $handle, $src)
-    {
-        if ($handle != $this->getId())
-            return $tag;
+        // Defer loading
+        if ($this->getDefer())
+            $tag = str_replace(' src', ' defer src', $tag);
 
-        return str_replace(' src', ' defer src', $tag);
-    }
+        return $tag;
+    }   
 
     /**
      * Registers script
@@ -161,13 +153,8 @@ class Script extends \Ponticlaro\Bebop\ScriptsLoader\Patterns\Script {
         // Apply any environment specific modification
         $this->__applyEnvModifications();
 
-        // Async loading
-        if ($this->getAsync())
-            add_filter('script_loader_tag', [$this, 'applyAsyncAttrOnTag'], 9999, 3);
-
-        // Defer loading
-        if ($this->getDefer())
-            add_filter('script_loader_tag', [$this, 'applyDeferAttrOnTag'], 9999, 3);
+        // Apply HTML script tag modifications
+        add_filter('script_loader_tag', [$this, 'applyScriptTagModifications'], 9999, 3);
 
         // Register script
         wp_register_script(
