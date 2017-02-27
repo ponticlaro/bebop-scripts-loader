@@ -6,8 +6,15 @@ use Ponticlaro\Bebop\ScriptsLoader\Css\ScriptsHook;
 use Ponticlaro\Bebop\ScriptsLoader\Helpers\ScriptsManager;
 use Ponticlaro\Bebop\ScriptsLoader\Patterns\Script;
 
-class Css extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
+class Css
 {
+    /**
+     * Class instance
+     * 
+     * @var object
+     */
+    private static $instance;
+
     /**
      * ScriptsManager instance
      *
@@ -16,10 +23,11 @@ class Css extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
     protected $manager;
 
     /**
-     * Instantiates CSS Manager
+     * Instantiates class
      * 
+     * @return void
      */
-    protected function __construct()
+    public function __construct()
     {
         $this->manager = new ScriptsManager();
 
@@ -27,6 +35,26 @@ class Css extends \Ponticlaro\Bebop\Common\Patterns\SingletonAbstract
         $this->addHook('front', 'wp_enqueue_scripts')
              ->addHook('back', 'admin_enqueue_scripts')
              ->addHook('login', 'login_enqueue_scripts');
+    }
+
+    /**
+     * Do not allow clones
+     * 
+     * @return void
+    */
+    private final function __clone() {}
+
+    /**
+     * Gets single instance of called class
+     * 
+     * @return object
+     */
+    public static function getInstance() 
+    {
+        if (!isset(static::$instance))
+            static::$instance = new static();
+
+        return static::$instance;
     }
 
     /**
