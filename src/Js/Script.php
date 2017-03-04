@@ -75,7 +75,7 @@ class Script extends \Ponticlaro\Bebop\ScriptsLoader\Patterns\Script {
      * 
      * @param bool $value True to load with async, false otherwise
      */
-    public function setAsync(bool $value)
+    public function setAsync($value)
     {
         $this->async = $value;
 
@@ -100,7 +100,7 @@ class Script extends \Ponticlaro\Bebop\ScriptsLoader\Patterns\Script {
      * 
      * @param bool $value True to load with defer, false otherwise
      */
-    public function setDefer(bool $value)
+    public function setDefer($value)
     {
         $this->defer = $value;
 
